@@ -57,6 +57,7 @@ dependencies:
   foldable_sidebar: ^1.0.0
   shared_preferences: 0.5.12
   audiofileplayer: ^1.3.3
+  side_menu_animation: ^0.0.1
 
 
 

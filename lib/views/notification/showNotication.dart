@@ -1,68 +1,75 @@
 import 'package:audiofileplayer/audiofileplayer.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:expandable/expandable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:player/components/constrains/constrain.dart';
 import 'package:player/components/widgets/commen-widgets.dart';
-import 'package:player/components/widgets/home-widget.dart';
-import 'package:player/views/list-of-reciters/list-of-reciters.dart';
+import 'package:player/components/widgets/notification-widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class shownotification extends StatefulWidget {
+class ShowNotification extends StatefulWidget {
   @override
-  _shownotificationState createState() => _shownotificationState();
+  _ShowNotificationState createState() => _ShowNotificationState();
 }
 
-class _shownotificationState extends State<shownotification> {
+class _ShowNotificationState extends State<ShowNotification> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   var a = AudioPlayer();
-  SharedPreferences prefs ;
-  bool salah=false,quam=false,quran=false; String salahtype="";
+  SharedPreferences prefs;
+
+  bool salah = false, quam = false, quran = false;
+  String salahtype = "";
   Audio audio;
+
   void shroe() async {
     print(a.getDuration());
   }
-  Future<void> _cancelNotificationWithTag(var Tag) async {
-    await flutterLocalNotificationsPlugin.cancel(0, tag: Tag);
+
+  Future<void> _cancelNotificationWithTag(var tag) async {
+    await flutterLocalNotificationsPlugin.cancel(0, tag: tag);
   }
 
-  Future<void> _getbool()async {
-    prefs =await  SharedPreferences.getInstance();
-    if(prefs.getBool("salah")==null)
-      {prefs.setBool("salah", false);salah=false;}
-    else
-      {salah=prefs.getBool("salah");}
+  Future<void> _getBool() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("salah") == null) {
+      prefs.setBool("salah", false);
+      salah = false;
+    } else {
+      salah = prefs.getBool("salah");
+    }
 
-    if(prefs.getBool("quam")==null)
-    {prefs.setBool("quam", false);quam=false;}
-    else
-    {quam=prefs.getBool("quam");}
+    if (prefs.getBool("quam") == null) {
+      prefs.setBool("quam", false);
+      quam = false;
+    } else {
+      quam = prefs.getBool("quam");
+    }
 
+    if (prefs.getBool("quran") == null) {
+      prefs.setBool("quran", false);
+      quran = false;
+    } else {
+      quran = prefs.getBool("quran");
+    }
 
-    if(prefs.getBool("quran")==null)
-    {prefs.setBool("quran", false);quran=false;}
-    else
-    {quran=prefs.getBool("quran");}
-
-    if(prefs.getString("salahtype")==null)
-    {prefs.setString("salahtype", "salah");salahtype="salah";}
-    else
-    {salahtype=prefs.getString("salahtype");}
+    if (prefs.getString("salahtype") == null) {
+      prefs.setString("salahtype", "salah");
+      salahtype = "salah";
+    } else {
+      salahtype = prefs.getString("salahtype");
+    }
   }
+
   @override
   void initState() {
-    _getbool();
+    _getBool();
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var andriod = new AndroidInitializationSettings("@mipmap/ic_launcher");
+    var android = new AndroidInitializationSettings("@mipmap/ic_launcher");
     var ios = new IOSInitializationSettings();
-    var seting = new InitializationSettings(android: andriod, iOS: ios);
-    flutterLocalNotificationsPlugin.initialize(seting);
-
+    var setting = new InitializationSettings(android: android, iOS: ios);
+    flutterLocalNotificationsPlugin.initialize(setting);
     super.initState();
-
   }
 
   Future<void> _showNotification() async {
@@ -75,38 +82,14 @@ class _shownotificationState extends State<shownotification> {
         payload: "Message");
   }
 
-  Future<void> _showNotificationCustomSound() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your other channel id',
-      'your other channel name',
-      'your other channel description',
-      sound: RawResourceAndroidNotificationSound('slow_spring_board'),
-      playSound: true,
-      // sound: ,
-    );
-    const IOSNotificationDetails iOSPlatformChannelSpecifics =
-        IOSNotificationDetails(sound: 'slow_spring_board.aiff');
-    const MacOSNotificationDetails macOSPlatformChannelSpecifics =
-        MacOSNotificationDetails(sound: 'slow_spring_board.aiff');
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics,
-        macOS: macOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0,
-        'custom sound notification title',
-        'custom sound notification body',
-        platformChannelSpecifics);
-  }
-
-  Future<void> _repeatNotification(var duration,String notificationsound) async {
+  Future<void> _repeatNotification(var duration, String notificationSound) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         new AndroidNotificationDetails(
       'repeating channel id',
       'repeating channel name',
-      'repeating description',tag: "tag1",
-      sound: RawResourceAndroidNotificationSound(notificationsound),
+      'repeating description',
+      tag: "tag1",
+      sound: RawResourceAndroidNotificationSound(notificationSound),
     );
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -120,163 +103,239 @@ class _shownotificationState extends State<shownotification> {
           androidAllowWhileIdle: true);
   }
 
-
-  Future<void> _cancelNotification(){
-
-  }
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        body: Container(
-            height: 0.99.sh,
-        child:Column(
-          textDirection: TextDirection.ltr,
-          children: [
-            myAppBar('الاعدادات'),
-            SizedBox(
-              height: 15.h,
-            ),
-           /* ExpandablePanel(
-              theme: ExpandableThemeData(
-
+        body: SafeArea(
+         child: Container(
+          height: 1.sh,
+           margin: EdgeInsets.symmetric(
+             horizontal: 25.w,
+           ),
+          child: ListView(
+            children: [
+              SizedBox(
+                height: 15.h,
               ),
-              header:   autoText("الصلاه على النبى", 1, 20.ssp, FontWeight.w800, Colors.black),
-
-              collapsed: Text("article", softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis,),
-              expanded: Text("articlebody", softWrap: true, ),
-              controller:ExpandableController(
-                initialExpanded: true,
-              ) ,
-              ),
-*/
-            Container(
-                height: 40.h,
-                margin: EdgeInsets.symmetric(horizontal: 15.sp),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  Switch(
-                      value: salah,
-                      activeColor: primColor,
-                      onChanged: (val){
-                        setState(() {
-                          salah=val;
-                          prefs.setBool("salah", salah);
-                          if(salah==true)
-                            _repeatNotification("minute",salahtype);
-                          else
-                            _cancelNotificationWithTag("tag1");
-                        });
-                  }),
-                    autoText("الصلاه على النبى", 1, 20.ssp, FontWeight.w800, Colors.black),
-                  ],
-                )),
-            SizedBox(
-              height: 15.h,
-            ),
-            Center(
-              child:  autoText("صيغه الذكر", 1, 17.ssp, FontWeight.w800, Colors.black),
-            ),
-            Row(
-              textDirection: TextDirection.rtl,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  child: Text("صيغه 1"),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+              AnimatedContainer(
+                  duration: Duration(
+                    milliseconds: 700,
                   ),
-                  onPressed: (){
-                   audio = Audio.load('assets/salah.mp3');
-                  audio.play();
-                   salahtype="salah";
-                   prefs.setString("salahtype", "salah");
-                },
-
+                  curve: Curves.bounceOut,
+                  height: salah?0.32.sh:0.1.sh,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                  ),
+                  decoration: notificationBoxShadow,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Switch(
+                                value: salah,
+                                activeColor: primColor,
+                                onChanged: (val) {
+                                  setState(() {
+                                    salah = val;
+                                    prefs.setBool("salah", salah,);
+                                    if (salah == true)
+                                      _repeatNotification("minute", salahtype,);
+                                    else
+                                      _cancelNotificationWithTag("tag1",);
+                                  },);
+                                },),
+                            autoText(
+                              "الصلاه على النبى",
+                              1,
+                              18.ssp,
+                              FontWeight.w800,
+                              Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                      salah?Flexible(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding:  EdgeInsets.symmetric(vertical: 5.h,),
+                                child: autoText('اختر صيغة الاشعارات', 1, 17.ssp, FontWeight.w600, Colors.black,),
+                              ),
+                            ),
+                            Flexible(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  salahTypeContainer(audio,'نغمه 3',primColor,),
+                                  salahTypeContainer(audio,'نغمه 2',Colors.white,),
+                                  salahTypeContainer(audio,'نغمه 1',Colors.white,),
+                                ],
+                              ),
+                            ),
+                            Flexible(
+                                child: Padding(
+                                padding:  EdgeInsets.symmetric(vertical: 5.h,),
+                                child: autoText('اختر توقيت الاشعارات', 1, 17.ssp, FontWeight.w600, Colors.black,),
+                              ),
+                            ),
+                            Flexible(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  salahTypeContainer(audio,'اسبوع',primColor,),
+                                  salahTypeContainer(audio,'يوم',Colors.white,),
+                                  salahTypeContainer(audio,'ساعه',Colors.white,),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ):SizedBox(),
+                    ],
+                  ),),
+              SizedBox(
+                height: 15.h,
+              ),
+              AnimatedContainer(
+                duration: Duration(
+                  milliseconds: 700,
                 ),
-                ElevatedButton(child: Text("صيغه 2"),onPressed: (){
-                  audio = Audio.load('assets/salahh.mp3');
-                  audio.play();
-                  prefs.setString("salahtype", "salahh");
-
-                  salahtype="salahh";
-                },),
-                ElevatedButton(child: Text("صيغه 3"),onPressed: (){
-                  audio = Audio.load('assets/salahhh.mp3');
-                  audio.play();
-                  prefs.setString("salahtype", "salahhh");
-                  salahtype="salahhh";
-                },),
+                curve: Curves.bounceOut,
+                height: quam?0.26.sh:0.1.sh,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ),
+                decoration: notificationBoxShadow,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Switch(
+                            value: quam,
+                            activeColor: primColor,
+                            onChanged: (val) {
+                              setState(() {
+                                quam = val;
+                                prefs.setBool("quam", quam);
+                                if (quam == true)
+                                  _repeatNotification("minute", salahtype);
+                                else
+                                  _cancelNotificationWithTag("tag1");
+                              });
+                            },),
+                          autoText(
+                            "قيام الليل",
+                            1,
+                            18.ssp,
+                            FontWeight.w800,
+                            Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                    quam ? Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: Padding(
+                              padding:  EdgeInsets.symmetric(vertical: 5.h,),
+                              child: autoText('اختر صيغة الاشعارات', 1, 17.ssp, FontWeight.w600, Colors.black,),
+                            ),
+                          ),
+                          Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                salahTypeContainer(audio,'نغمه 2',primColor,),
+                                salahTypeContainer(audio,'نغمه 1',Colors.white,),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ):SizedBox(),
+                  ],
+                ),),
+              SizedBox(
+                height: 15.h,
+              ),
+              AnimatedContainer(
+                duration: Duration(
+                  milliseconds: 700,
+                ),
+                curve: Curves.bounceOut,
+                height: quran?0.26.sh:0.1.sh,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20.w,
+                ),
+                decoration: notificationBoxShadow,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Switch(
+                            value: quran,
+                            activeColor: primColor,
+                            onChanged: (val) {
+                              setState(() {
+                                quran = val;
+                                prefs.setBool("quran", quran);
+                                if (quran == true)
+                                  _repeatNotification("minute", salahtype);
+                                else
+                                  _cancelNotificationWithTag("tag1");
+                              });
+                            },),
+                          autoText(
+                            'قراءه القران',
+                            1,
+                            18.ssp,
+                            FontWeight.w800,
+                            Colors.black,
+                          ),
+                        ],
+                      ),
+                    ),
+                    quran ? Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: Padding(
+                              padding:  EdgeInsets.symmetric(vertical: 5.h,),
+                              child: autoText('اختر صيغة الاشعارات', 1, 17.ssp, FontWeight.w600, Colors.black,),
+                            ),
+                          ),
+                          Flexible(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                salahTypeContainer(audio,'نغمه 2',primColor,),
+                                salahTypeContainer(audio,'نغمه 1',Colors.white,),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ):SizedBox(),
+                  ],
+                ),),
             ],
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            Container(
-                height: 40.h,
-                margin: EdgeInsets.symmetric(horizontal: 15.sp),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  Switch(
-                      value: quam,
-                      activeColor: primColor,
-                      onChanged: (val){
-                        setState(() {
-                          quam=val;
-                          prefs.setBool("quam", quam);
-                        });
-
-                  }),
-                    autoText("قيام الليل", 1, 20.ssp, FontWeight.w800, Colors.black),
-                  ],
-                )),
-            Center(
-              child:  autoText("صيغه الذكر", 1, 17.ssp, FontWeight.w800, Colors.black),
-            ),
-            Row(
-              textDirection: TextDirection.rtl,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(child: Text("صيغه 1"),onPressed: (){
-                  audio = Audio.load('assets/salah.mp3');
-                  audio.play();
-                },),
-                ElevatedButton(child: Text("صيغه 2"),onPressed: (){
-                  audio = Audio.load('assets/salah.mp3');
-                  audio.play();
-                },),
-               ],
-            ),
-            SizedBox(
-              height: 15.h,
-            ),
-            Container(
-                height: 40.h,
-                margin: EdgeInsets.symmetric(horizontal: 15.sp),
-                child: Row(
-
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  Switch(
-                      value: quran,
-                      activeColor: primColor,
-                      onChanged: (val){
-
-                        setState(() {
-                          quran=val;
-                          prefs.setBool("quran", quran);
-
-                        });
-                  }),
-                    autoText("قراءه القران ", 1, 20.ssp, FontWeight.w800, Colors.black),
-                  ],
-                )),
-
-
-          ],
-        )
-        ));
+          ),),
+    ),);
   }
 }

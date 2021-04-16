@@ -13,14 +13,14 @@ class RadioPlayerController extends GetxController{
   var metaData='Radio Channel'.obs;
   Future<void> initRadioService() async {
     try {
-   //   await flutterRadioPlayer.value.init(metaData.value, "Live", "http://live.mp3quran.net:9992/;", "false");
+     // await flutterRadioPlayer.value.init('Quran Kareem', "Live", "http://live.mp3quran.net:9992/;", "false");
     } on PlatformException {
       print("Exception occurred while trying to register the services.");
     }
   }
 
   Future<void> changeServer(String server) async {
-      //flutterRadioPlayer.value.setUrl(server, "true");
+     flutterRadioPlayer.value.setUrl(server, "true");
       playNow.value=server;
       update();
   }

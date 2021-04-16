@@ -72,7 +72,7 @@ myImageContainer(BuildContext context,String image){
 
  radioRunContainer(var item,double contHeight2,RadioPlayerController radioController){
   return StreamBuilder(
-   //   stream: radioController.flutterRadioPlayer.value.isPlayingStream,
+      stream: radioController.flutterRadioPlayer.value.isPlayingStream,
       initialData:FlutterRadioPlayer.flutter_radio_paused,
       builder: (context, AsyncSnapshot<String> snapshot) {
         String returnData = snapshot.data;
@@ -168,3 +168,12 @@ myImageContainer(BuildContext context,String image){
   );
 }
 
+
+////////////
+customIcon(IconData icon){
+    return Icon(
+      icon,
+      size: 30.sp,
+      color: Colors.white,
+    );
+}

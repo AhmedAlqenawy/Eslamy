@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +25,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    radioPlayerController = Get.put(RadioPlayerController());
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 1),
@@ -40,13 +38,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    //radioPlayerController = Get.put(RadioPlayerController());
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SafeArea(
             child: Column(
             children: <Widget>[
-             myAppBar('القرآن الكريم'),
+             //myAppBar('القرآن الكريم'),
              //Famous Reciters
              Container(
               margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -71,32 +70,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                       MaterialPageRoute(
                                           builder: (context) => ListOfSurPage(
                                               famousRecitersList[index].name,
-                                              famousRecitersList[index].server)));
+                                              famousRecitersList[index].server,),),);
                                 },
                                 child: AnimatedContainer(
-                                  duration: Duration(milliseconds: 1500),
+                                  duration: Duration(milliseconds: 1500,),
                                   curve: Curves.bounceInOut,
                                   height:_animationController.value==0?0: 60.h + _animationController.value,
                                   margin: EdgeInsets.symmetric(
-                                      horizontal: 5.sp, vertical: 5.sp),
+                                      horizontal: 5.sp, vertical: 5.sp,),
                                   alignment: Alignment.bottomCenter,
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30.r),
-                                          bottomRight: Radius.circular(30.r)),
+                                          topLeft: Radius.circular(30.r,),
+                                          bottomRight: Radius.circular(30.r,),),
                                       image: DecorationImage(
                                         image: NetworkImage(
-                                            famousRecitersList[index].imageUrl),
+                                            famousRecitersList[index].imageUrl,),
                                         fit: BoxFit.fill,
                                       ),
-                                      boxShadow: [myBoxShadow]),
+                                      boxShadow: [myBoxShadow],),
                                   child: Container(
                                       width: 140.w,
                                       decoration: BoxDecoration(
                                         color: Colors.black26,
                                         borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(30.r)),
+                                            bottomRight: Radius.circular(30.r),),
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
@@ -106,26 +105,26 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                             2,
                                             18.ssp,
                                             FontWeight.w700,
-                                            Colors.white),
-                                      )),
+                                            Colors.white,),
+                                      ),),
                                 ),
                               ),
                             ],
                           );
-                        }),
-                  )
+                        },),
+                  ),
                 ],
               ),
             ),
              //Famous Radio channel
-             radioSection(context, _animationController.value, radioPlayerController),
+          //   radioSection(context,_animationController.value==0?0: _animationController.value, radioPlayerController,),
              //el Rewayat
              Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
+              margin: EdgeInsets.symmetric(vertical: 10.h,),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  headContainer( 'الروايـــات', RewayatListPage()),
+                  headContainer( 'الروايـــات', RewayatListPage(),),
                   Column(
                     children: List.generate(3, (index) {
                       return GestureDetector(
@@ -134,26 +133,26 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      RecitersPage(rewayat[index].name)));
+                                      RecitersPage(rewayat[index].name),),);
                         },
                         child: Container(
                             height: 60.h,
-                            margin: EdgeInsets.all(7.sp),
+                            margin: EdgeInsets.all(7.sp,),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(30.r),
-                                boxShadow: [myBoxShadow]),
+                                borderRadius: BorderRadius.circular(30.r,),
+                                boxShadow: [myBoxShadow],),
                             child: autoText(rewayat[index].name, 1, 20.ssp,
-                                FontWeight.w800, Colors.black)),
+                                FontWeight.w800, Colors.black,),),
                       );
-                    }),
+                    },),
                   )
                 ],
               ),
             ),
           ],
-        )),
+        ),),
       ),
     );
   }

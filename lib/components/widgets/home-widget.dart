@@ -47,7 +47,7 @@ return Container(
             itemBuilder: (context, index) {
               return Column(
                 children: <Widget>[
-              //    radioRunContainer(radioList[index],contHeight2,radioController),
+                  radioRunContainer(radioList[index],contHeight2,radioController),
                   Container(
                       height: 40.h,
                       child: autoText(radioList[index].name, 2,
